@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,8 +27,14 @@ public class AccountTaskProcessorService implements TaskProcessorService, Applic
         log.info("Account task started... \n verifying if crediting is Done!");
             try {
                 delayExecution();
-                log.info("Crediting is done. Performing Account Reconciliation Task");
-                Thread.sleep(2000L); // let's assume this process takes 2secs
+                LocalDateTime currentDateTime = LocalDateTime.now();
+                LocalDateTime endDate = scheduleTaskProperty.getEndDate();
+                while(currentDateTime.isBefore(endDate)) { // assuming thousand of files with thousand of contents need to process so we use while loop
+                    log.info("Crediting is done. Performing Account Reconciliation Task");
+                    Thread.sleep(2000L); // let's assume this process takes 2secs
+                    currentDateTime = LocalDateTime.now();
+                }
+                log.info("AccountTaskProcessorService is terminated with the end date of {}", endDate);
 
             } catch (Exception e) {
                 log.error("Error: {}", e.getMessage());

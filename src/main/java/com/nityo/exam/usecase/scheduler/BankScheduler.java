@@ -28,7 +28,7 @@ public class BankScheduler {
     private final ExecutorService executor = Executors.newScheduledThreadPool(5);
 
 
-    public void configureTasks() {
+    public void runScheduledTask() {
 
         for(ScheduleTaskProperty scheduleTaskProperty : scheduleContextFactory.getScheduleTaskProperties()) {
             executor.submit(() ->

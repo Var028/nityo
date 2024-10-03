@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 /**
  * @author Var Arenz G. Villarino
  */
@@ -17,6 +19,6 @@ public class ScheduleTaskProperty {
 
     private String startDate;
 
-    private String endDate;
+    private LocalDateTime endDate;
 
 }

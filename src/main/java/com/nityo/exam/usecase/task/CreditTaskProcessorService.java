@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 /**
  * @author Var Arenz G. Villarino
  */
@@ -25,8 +27,15 @@ public class CreditTaskProcessorService implements TaskProcessorService {
     public void performTask(ScheduleTaskProperty scheduleTaskProperty) {
         creditTaskPublisher.publish(false);
         try {
-            log.info("Running some ETL(Spring Batch) for calculation \n and persisting of data in Database... \n this task may delay the execution of Account Task");
-            Thread.sleep(5000L); // let's assume that this task takes 5 seconds
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            LocalDateTime endDate = scheduleTaskProperty.getEndDate();
+            while(currentDateTime.isBefore(endDate)) { // assuming thousand of files with thousand of contents need to process so we use while loop
+                log.info("Running some ETL(Spring Batch) for calculation \n and persisting of data in Database... \n this task may delay the execution of Account Task");
+                Thread.sleep(5000L); // let's assume that this task takes 5 seconds
+                currentDateTime = LocalDateTime.now();
+            }
+            log.info("CreditTaskProcessorService is terminated with the end date of {}", endDate);
+
         }catch (Exception e) {
             log.error("Error: {}", e.getMessage());
             Thread.currentThread().interrupt();

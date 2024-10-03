@@ -18,7 +18,7 @@ public class ScheduleEntrypoint {
 
     @EventListener(ApplicationReadyEvent.class)
     public void triggerSchedulers() {
-        bankScheduler.configureTasks();
+        bankScheduler.runScheduledTask();
     }
 
 }
